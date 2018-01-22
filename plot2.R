@@ -1,0 +1,10 @@
+#Importing of Data
+dataset <- read.table("household_power_consumption.txt",sep=";",header=TRUE,stringsAsFactors=FALSE,na.strings="?")
+dataset$Date <-as.Date(dataset$Date,format="%d/%m/%Y") 
+Consumption<-subset(dataset,Date%in%as.Date(c("2007-02-01","2007-02-02")))
+Consumption$Datetime <-as.POSIXct(paste(Consumption$Date,Consumption$Time))
+Consumption$Global_active_power <- as.numeric(Consumption$Global_active_power)
+DateTime<-(Consumption$Datetime <- strptime(Consumption$Datetime, format = "%Y-%m-%d %H:%M:%S"))
+png(file="plot2.png", width=480, height=480)
+with(dataset,plot(DateTime,y=Consumption$Global_active_power,type="l",xlab="",ylab="Global Active Power (kilowatts)"))
+while (!is.null(dev.list()))  dev.off()
